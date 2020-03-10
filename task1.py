@@ -1,4 +1,4 @@
-#  python3 main.py Москва, ул. Ак. Королева, 12
+#  python3 task1.py Москва, ул. Ак. Королева, 12
 import sys
 from io import BytesIO
 import requests
