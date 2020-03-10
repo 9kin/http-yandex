@@ -6,6 +6,13 @@ def search_requests(params):
     api_server = "https://search-maps.yandex.ru/v1/"
     return requests.get(api_server, params=params)
 
+
+def get_ll_schedule(organization):
+    hours = organization["properties"]["CompanyMetaData"]["Hours"]["text"]
+    point = organization["geometry"]["coordinates"]
+    org_point = "{0},{1}".format(point[0], point[1])
+    return org_point, hours
+
 def lonlat_distance(a, b):
     degree_to_meters_factor = 111 * 1000
     a_lon, a_lat = a
