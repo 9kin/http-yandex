@@ -1,5 +1,19 @@
+from io import BytesIO
 import requests
+from PIL import Image
 import math
+import random
+
+def city_map(name, map_sat):
+    ll, spn = get_ll_spn(geocoder_request(name))
+    api_key = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
+    map_params = {
+        "l": "map" if map_sat else "sat",
+        "ll": ll,
+        "z": random.randrange(13, 17)
+    }
+    response = static_map_request(map_params)
+    return Image.open(BytesIO(response.content))
 
 
 def search_requests(params):
@@ -25,13 +39,16 @@ def lonlat_distance(a, b):
     return distance
 
 
-def geocoder_request(toponym_to_find):
+def geocoder_request(toponym_to_find, params=None):
     geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
-    geocoder_params = {
-        "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
-        "geocode": toponym_to_find,
-        "format": "json"
-    }
+    if params is None:
+        geocoder_params = {
+            "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
+            "geocode": toponym_to_find,
+            "format": "json"
+        }
+    else:
+        geocoder_params = params
     response = requests.get(geocoder_api_server, params=geocoder_params)
     return response.json()
 
@@ -43,7 +60,7 @@ def get_ll_spn(json_response):
     upper_x, upper_y = map(
         float, toponym["boundedBy"]["Envelope"]["upperCorner"].split())
     toponym_coodrinates = toponym["Point"]["pos"]
-    return toponym_coodrinates.split(" "), [str((upper_x - lower_x) / 2), str((upper_y - lower_y) / 2)]
+    return ",".join(toponym_coodrinates.split(" ")), [str((upper_x - lower_x) / 2), str((upper_y - lower_y) / 2)]
 
 
 def static_map_request(params):

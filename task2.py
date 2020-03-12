@@ -1,4 +1,4 @@
-#  python3 task2.py Москва, ул. Ак. Королева, 12
+#  python3 task2.py Пермь, ул. Пушкина, 76
 import sys
 from io import BytesIO
 import requests
@@ -18,7 +18,7 @@ search_params = {
     "apikey": api_key,
     "text": "аптека",
     "lang": "ru_RU",
-    "ll": ",".join(ll),
+    "ll": ll,
     "type": "biz"
 }
 
@@ -32,7 +32,7 @@ point = organization["geometry"]["coordinates"]
 org_point = "{0},{1}".format(point[0], point[1])
 map_params = {
     "l": "map",
-    "pt": "{0},pm2dgl~{1},ya_ru".format(org_point, ",".join(ll))
+    "pt": "{0},pm2dgl~{1},ya_ru".format(org_point, ll)
 }
 
 response = geocoder.static_map_request(map_params)

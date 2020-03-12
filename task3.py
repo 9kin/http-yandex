@@ -1,4 +1,4 @@
-#  python3 task3.py Москва, ул. Ак. Королева, 12
+#  python3 task3.py Пермь, ул. Пушкина, 76
 import sys
 from io import BytesIO
 import requests
@@ -18,18 +18,16 @@ search_params = {
     "apikey": api_key,
     "text": "аптека",
     "lang": "ru_RU",
-    "ll": ",".join(ll),
+    "ll":  ll,
     "type": "biz"
 }
 
 data = geocoder.search_requests(search_params).json()
 
-
 pt = ""
 for i in range(10):
     ll, schedule = geocoder.get_ll_schedule(data["features"][i])
     color = "gr"
-
     if "круглосуточно" in schedule:
         color = "dg"
     elif schedule != "":
